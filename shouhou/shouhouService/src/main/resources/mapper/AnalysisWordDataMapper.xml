@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.AnalysisWordDataMapper">
+	<resultMap id="BaseResultMap" type="com.simple.domain.po.AnalysisWordData">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="words_id" jdbcType="VARCHAR" property="wordsId" />
+		<result column="people_counts" jdbcType="INTEGER" property="peopleCounts" />
+		<result column="pay_counts" jdbcType="INTEGER" property="payCounts" />
+		<result column="cr" jdbcType="DOUBLE" property="cr" />
+		<result column="create_by" jdbcType="VARCHAR" property="createBy" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="product_id" jdbcType="VARCHAR" property="productId" />
+		<result column="words_name" jdbcType="VARCHAR" property="wordsName" />
+	</resultMap>
+	
+	<sql id="allColumns">
+	    `id`,`words_id`,`people_counts`,`pay_counts`,`cr`,`create_by`,`create_time`,`update_by`,`update_time`,`product_id`,`words_name` 
+	</sql>
+
+	<sql id="dynamicWhereConditions">
+	        where 1 = 1
+		<if test=" null != id "> and `id` = #{id} </if>    
+		<if test=" null != wordsId "> and `words_id` = #{wordsId} </if>    
+		<if test=" null != peopleCounts "> and `people_counts` = #{peopleCounts} </if>    
+		<if test=" null != payCounts "> and `pay_counts` = #{payCounts} </if>    
+		<if test=" null != cr "> and `cr` = #{cr} </if>    
+		<if test=" null != createBy "> and `create_by` = #{createBy} </if>    
+		<if test=" null != createTime "> and `create_time` = #{createTime} </if>    
+		<if test=" null != createTimeGte ">  and `create_time`  >= #{createTimeGte} </if>  
+		<if test=" null != createTimeLte "> and #{createTimeLte}  >=  `create_time` </if>  
+		<if test=" null != updateBy "> and `update_by` = #{updateBy} </if>    
+		<if test=" null != updateTime "> and `update_time` = #{updateTime} </if>    
+		<if test=" null != productId "> and `product_id` = #{productId} </if>    
+		<if test=" null != wordsName "> and `words_name` = #{wordsName} </if>    
+		<if test=" null != wordsNameLike and '' != wordsNameLike "> and `words_name`  like concat('%', #{wordsNameLike},'%')</if> 
+		<if test=" null != ids ">
+		 	and id in  
+			<foreach collection="ids" index="index" item="idItem" open="(" separator="," close=")">
+			#{idItem}
+			</foreach>
+		</if>		
+		<if test=" null != sortColumns"> order by ${sortColumns} </if>
+	</sql>
+	
+	<select id="findList" parameterType="com.simple.domain.po.AnalysisWordData" resultMap="BaseResultMap">
+		select <include refid="allColumns" /> from analysis_word_data
+		<include refid="dynamicWhereConditions" />
+	</select>
+	
+	
+	
+	
+	
+		<!-- HoldBegin -->
+	<select id="caluculateList" parameterType="com.simple.domain.po.AnalysisWordData" resultMap="BaseResultMap">
+		SELECT product_id,words_id,words_name,SUM(people_counts) AS people_counts,SUM(pay_counts) AS pay_counts , (SUM(pay_counts)/SUM(people_counts)) AS cr  FROM analysis_word_data
+		where `product_id` = #{productId} 
+		<if test=" null != wordsNameLike and '' != wordsNameLike "> and `words_name`  like concat('%', #{wordsNameLike},'%')</if>
+		<if test=" null != createTimeGte ">  and `create_time`  >= #{createTimeGte} </if>  
+		<if test=" null != createTimeLte "> and #{createTimeLte}  >=  `create_time` </if>  
+		GROUP BY words_id ORDER BY pay_counts DESC, cr DESC
+	</select>	
+	<!-- HoldEnd -->
+
+
+</mapper>

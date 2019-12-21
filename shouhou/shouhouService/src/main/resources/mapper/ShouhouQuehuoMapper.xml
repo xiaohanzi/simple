@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.ShouhouQuehuoMapper">
+	<resultMap id="BaseResultMap" type="com.simple.domain.po.ShouhouQuehuo">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="order_id" jdbcType="VARCHAR" property="orderId" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="create_by" jdbcType="VARCHAR" property="createBy" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+		<result column="ck_remark" jdbcType="VARCHAR" property="ckRemark" />
+		<result column="kf_remark" jdbcType="VARCHAR" property="kfRemark" />
+		<result column="finished" jdbcType="INTEGER" property="finished" />
+		<result column="handle_status" jdbcType="INTEGER" property="handleStatus" />
+	</resultMap>
+	
+	<sql id="allColumns">
+	    `id`,`order_id`,`create_time`,`create_by`,`update_time`,`update_by`,`ck_remark`,`kf_remark`,`finished`,`handle_status` 
+	</sql>
+
+	<sql id="dynamicWhereConditions">
+	        where 1 = 1
+		<if test=" null != id "> and `id` = #{id} </if>    
+		<if test=" null != orderId "> and `order_id` = #{orderId} </if>    
+		<if test=" null != orderIdLike and '' != orderIdLike "> and `order_id`  like concat('%', #{orderIdLike},'%')</if> 
+		<if test=" null != createTime "> and `create_time` = #{createTime} </if>    
+		<if test=" null != createTimeGte ">  and `create_time`  >= #{createTimeGte} </if>  
+		<if test=" null != createTimeLte "> and #{createTimeLte}  >=  `create_time` </if>  
+		<if test=" null != createBy "> and `create_by` = #{createBy} </if>    
+		<if test=" null != updateTime "> and `update_time` = #{updateTime} </if>    
+		<if test=" null != updateBy "> and `update_by` = #{updateBy} </if>    
+		<if test=" null != ckRemark "> and `ck_remark` = #{ckRemark} </if>    
+		<if test=" null != kfRemark "> and `kf_remark` = #{kfRemark} </if>    
+		<if test=" null != finished "> and `finished` = #{finished} </if>    
+		<if test=" null != handleStatus "> and `handle_status` = #{handleStatus} </if>    
+		<if test=" null != ids ">
+		 	and id in  
+			<foreach collection="ids" index="index" item="idItem" open="(" separator="," close=")">
+			#{idItem}
+			</foreach>
+		</if>		
+		<if test=" null != sortColumns"> order by ${sortColumns} </if>
+	</sql>
+	
+	<select id="findList" parameterType="com.simple.domain.po.ShouhouQuehuo" resultMap="BaseResultMap">
+		select <include refid="allColumns" /> from shouhou_quehuo
+		<include refid="dynamicWhereConditions" />
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>

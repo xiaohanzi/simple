@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.ShouhouListMapper">
+	<resultMap id="BaseResultMap" type="com.simple.domain.po.ShouhouList">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="shop" jdbcType="VARCHAR" property="shop" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="create_by" jdbcType="VARCHAR" property="createBy" />
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+		<result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+		<result column="cus_name" jdbcType="VARCHAR" property="cusName" />
+		<result column="trans_no" jdbcType="VARCHAR" property="transNo" />
+		<result column="fee" jdbcType="DECIMAL" property="fee" />
+		<result column="reason" jdbcType="VARCHAR" property="reason" />
+		<result column="event_type" jdbcType="VARCHAR" property="eventType" />
+		<result column="deal_status" jdbcType="INTEGER" property="dealStatus" />
+		<result column="deal_remark" jdbcType="VARCHAR" property="dealRemark" />
+		<result column="miss" jdbcType="INTEGER" property="miss" />
+		<result column="order_fee" jdbcType="DECIMAL" property="orderFee" />
+	</resultMap>
+	
+	<sql id="allColumns">
+	    `id`,`shop`,`create_time`,`update_time`,`create_by`,`update_by`,`order_no`,`cus_name`,`trans_no`,`fee`,`reason`,`event_type`,`deal_status`,`deal_remark`,`miss`,`order_fee` 
+	</sql>
+
+	<sql id="dynamicWhereConditions">
+	        where 1 = 1
+		<if test=" null != id "> and `id` = #{id} </if>    
+		<if test=" null != shop "> and `shop` = #{shop} </if>    
+		<if test=" null != shops "> 
+			and `shop` in
+		   <foreach collection="shops" item="item_shop" open="(" close=")" separator=",">  
+		     #{item_shop} 
+		   </foreach> 
+		</if>
+		<if test=" null != createTime "> and `create_time` = #{createTime} </if>    
+		<if test=" null != createTimeGte ">  and `create_time`  >= #{createTimeGte} </if>  
+		<if test=" null != createTimeLte "> and #{createTimeLte}  >=  `create_time` </if>  
+		<if test=" null != updateTime "> and `update_time` = #{updateTime} </if>    
+		<if test=" null != updateTimeGte ">  and `update_time`  >= #{updateTimeGte} </if>  
+		<if test=" null != updateTimeLte "> and #{updateTimeLte}  >=  `update_time` </if>  
+		<if test=" null != createBy "> and `create_by` = #{createBy} </if>    
+		<if test=" null != updateBy "> and `update_by` = #{updateBy} </if>    
+		<if test=" null != orderNo "> and `order_no` = #{orderNo} </if>    
+		<if test=" null != orderNoLike and '' != orderNoLike "> and `order_no`  like concat('%', #{orderNoLike},'%')</if> 
+		<if test=" null != cusName "> and `cus_name` = #{cusName} </if>    
+		<if test=" null != transNo "> and `trans_no` = #{transNo} </if>    
+		<if test=" null != fee "> and `fee` = #{fee} </if>    
+		<if test=" null != reason "> and `reason` = #{reason} </if>    
+		<if test=" null != eventType "> and `event_type` = #{eventType} </if>    
+		<if test=" null != dealStatus "> and `deal_status` = #{dealStatus} </if>    
+		<if test=" null != dealRemark "> and `deal_remark` = #{dealRemark} </if>    
+		<if test=" null != miss "> and `miss` = #{miss} </if>    
+		<if test=" null != orderFee "> and `order_fee` = #{orderFee} </if>    
+		<if test=" null != ids ">
+		 	and id in  
+			<foreach collection="ids" index="index" item="idItem" open="(" separator="," close=")">
+			#{idItem}
+			</foreach>
+		</if>		
+		<if test=" null != sortColumns"> order by ${sortColumns} </if>
+	</sql>
+	
+	<select id="findList" parameterType="com.simple.domain.po.ShouhouList" resultMap="BaseResultMap">
+		select <include refid="allColumns" /> from shouhou_list
+		<include refid="dynamicWhereConditions" />
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>

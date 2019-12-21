@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.ShouhouAlibabaMapper">
+	<resultMap id="BaseResultMap" type="com.simple.domain.po.ShouhouAlibaba">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="order_date" jdbcType="DATE" property="orderDate" />
+		<result column="cus_name" jdbcType="VARCHAR" property="cusName" />
+		<result column="cus_phone" jdbcType="VARCHAR" property="cusPhone" />
+		<result column="goods_des" jdbcType="VARCHAR" property="goodsDes" />
+		<result column="goods_color" jdbcType="VARCHAR" property="goodsColor" />
+		<result column="goods_size" jdbcType="VARCHAR" property="goodsSize" />
+		<result column="goods_count" jdbcType="INTEGER" property="goodsCount" />
+		<result column="goods_cost" jdbcType="DECIMAL" property="goodsCost" />
+		<result column="trans_fee" jdbcType="DECIMAL" property="transFee" />
+		<result column="pay_status" jdbcType="INTEGER" property="payStatus" />
+		<result column="create_by" jdbcType="VARCHAR" property="createBy" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+	
+	<sql id="allColumns">
+	    `id`,`order_date`,`cus_name`,`cus_phone`,`goods_des`,`goods_color`,`goods_size`,`goods_count`,`goods_cost`,`trans_fee`,`pay_status`,`create_by`,`create_time`,`update_by`,`update_time` 
+	</sql>
+
+	<sql id="dynamicWhereConditions">
+	        where 1 = 1
+		<if test=" null != id "> and `id` = #{id} </if>    
+		<if test=" null != orderDate "> and `order_date` = #{orderDate} </if>    
+		<if test=" null != orderDateGte ">  and `order_date`  >= #{orderDateGte} </if>  
+		<if test=" null != orderDateLte "> and #{orderDateLte}  >=  `order_date` </if>  
+		<if test=" null != cusName "> and `cus_name` = #{cusName} </if>    
+		<if test=" null != cusNameLike and '' != cusNameLike "> and `cus_name`  like concat('%', #{cusNameLike},'%')</if> 
+		<if test=" null != cusPhone "> and `cus_phone` = #{cusPhone} </if>    
+		<if test=" null != cusPhoneLike and '' != cusPhoneLike "> and `cus_phone`  like concat('%', #{cusPhoneLike},'%')</if> 
+		<if test=" null != goodsDes "> and `goods_des` = #{goodsDes} </if>    
+		<if test=" null != goodsColor "> and `goods_color` = #{goodsColor} </if>    
+		<if test=" null != goodsSize "> and `goods_size` = #{goodsSize} </if>    
+		<if test=" null != goodsCount "> and `goods_count` = #{goodsCount} </if>    
+		<if test=" null != goodsCost "> and `goods_cost` = #{goodsCost} </if>    
+		<if test=" null != transFee "> and `trans_fee` = #{transFee} </if>    
+		<if test=" null != payStatus "> and `pay_status` = #{payStatus} </if>    
+		<if test=" null != createBy "> and `create_by` = #{createBy} </if>    
+		<if test=" null != createTime "> and `create_time` = #{createTime} </if>    
+		<if test=" null != updateBy "> and `update_by` = #{updateBy} </if>    
+		<if test=" null != updateTime "> and `update_time` = #{updateTime} </if>    
+		<if test=" null != ids ">
+		 	and id in  
+			<foreach collection="ids" index="index" item="idItem" open="(" separator="," close=")">
+			#{idItem}
+			</foreach>
+		</if>		
+		<if test=" null != sortColumns"> order by ${sortColumns} </if>
+	</sql>
+	
+	<select id="findList" parameterType="com.simple.domain.po.ShouhouAlibaba" resultMap="BaseResultMap">
+		select <include refid="allColumns" /> from shouhou_alibaba
+		<include refid="dynamicWhereConditions" />
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>

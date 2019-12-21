@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.ShouhouBujianMapper">
+	<resultMap id="BaseResultMap" type="com.simple.domain.po.ShouhouBujian">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+		<result column="shop" jdbcType="VARCHAR" property="shop" />
+		<result column="ems" jdbcType="INTEGER" property="ems" />
+		<result column="cus_name" jdbcType="VARCHAR" property="cusName" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+		<result column="reason" jdbcType="VARCHAR" property="reason" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="create_by" jdbcType="VARCHAR" property="createBy" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+		<result column="trans_no" jdbcType="VARCHAR" property="transNo" />
+		<result column="trans_info" jdbcType="INTEGER" property="transInfo" />
+		<result column="deal_remark" jdbcType="VARCHAR" property="dealRemark" />
+		<result column="cus_phone" jdbcType="VARCHAR" property="cusPhone" />
+		<result column="cus_addr" jdbcType="VARCHAR" property="cusAddr" />
+	</resultMap>
+	
+	<sql id="allColumns">
+	    `id`,`order_no`,`shop`,`ems`,`cus_name`,`content`,`reason`,`create_time`,`create_by`,`update_time`,`update_by`,`trans_no`,`trans_info`,`deal_remark`,`cus_phone`,`cus_addr` 
+	</sql>
+				<!-- HoldBegin -->
+	<sql id="dynamicWhereConditions">
+	        where 1 = 1
+		<if test=" null != id "> and `id` = #{id} </if>    
+		<if test=" null != orderNo "> and `order_no` = #{orderNo} </if>    
+		<if test=" null != orderNoLike and '' != orderNoLike "> and `order_no`  like concat('%', #{orderNoLike},'%')</if> 
+		<if test=" null != shop "> and `shop` = #{shop} </if>    
+		<if test=" null != shops "> 
+			and `shop` in
+		   <foreach collection="shops" item="item_shop" open="(" close=")" separator=",">  
+		     #{item_shop} 
+		   </foreach> 
+		</if>
+		<if test=" null != ems "> and `ems` = #{ems} </if>    
+		<if test=" null != cusName "> and `cus_name` = #{cusName} </if>    
+		<if test=" null != cusNameLike and '' != cusNameLike "> and `cus_name`  like concat('%', #{cusNameLike},'%')</if> 
+		<if test=" null != cusPhone "> and `cus_phone` = #{cusPhone} </if>    
+		<if test=" null != cusPhone and '' != cusPhone "> and `cus_phone`  like concat('%', #{cusPhone},'%')</if> 
+		<if test=" null != cusAddr "> and `cus_addr` = #{cusAddr} </if> 		
+		<if test=" null != content "> and `content` = #{content} </if>    
+		<if test=" null != reason "> and `reason` = #{reason} </if>    
+		<if test=" null != createTime "> and `create_time` = #{createTime} </if>    
+		<if test=" null != createTimeGte ">  and `create_time`  >= #{createTimeGte} </if>  
+		<if test=" null != createTimeLte "> and #{createTimeLte}  >=  `create_time` </if>  		
+		<if test=" null != createBy "> and `create_by` = #{createBy} </if>    
+		<if test=" null != updateTime "> and `update_time` = #{updateTime} </if>    
+		<if test=" null != updateBy "> and `update_by` = #{updateBy} </if>  
+		<choose>  
+			<when test="transnohave == 1 ">  
+				and (`trans_no` is null or  `trans_no` = '')
+			</when>
+			<when test="transnohave == 2 ">  
+				and (`trans_no` is not null and  `trans_no` != '')
+			</when>		
+		</choose> 
+		<if test=" null != transNo "> and `trans_no` = #{transNo} </if>   
+		<if test=" null != transInfo "> and `trans_info` = #{transInfo} </if>    
+		<if test=" null != dealRemark "> and `deal_remark` = #{dealRemark} </if>    
+		<if test=" null != ids ">
+		 	and id in  
+			<foreach collection="ids" index="index" item="idItem" open="(" separator="," close=")">
+			#{idItem}
+			</foreach>
+		</if>		
+		<if test=" null != sortColumns"> order by ${sortColumns} </if>
+	</sql>
+	<!-- HoldEnd -->
+	
+	<select id="findList" parameterType="com.simple.domain.po.ShouhouBujian" resultMap="BaseResultMap">
+		select <include refid="allColumns" /> from shouhou_bujian
+		<include refid="dynamicWhereConditions" />
+	</select>
+
+</mapper>

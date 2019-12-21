@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>后台</title>
+	<link rel="stylesheet" type="text/css" href="../static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="../lib/Hui-iconfont/1.0.8/iconfont.css" />
+	<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/style.css" />
+
+	<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script> 
+	<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+	<script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script> 
+	<script type="text/javascript" src="../static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="../lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+	<script type="text/javascript" src="../lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+	<script type="text/javascript" src="../lib/laypage/1.2/laypage.js"></script>
+	<script type="text/javascript" src="../static/initdata.js"></script>
+	<style>
+		.cusinfo{
+			width:260px;
+			word-break:keep-all;
+			white-space:nowrap;
+			overflow:hidden;
+			text-overflow:ellipsis;
+		}
+	</style>
+</head>
+<body>
+    <div>售后问题列表<div>
+	
+	<div class="page-container">
+		<div class="text-c">
+		 <span> 完结状态：</span>
+		 <input type="radio" name="prostatus" value="1" checked />未完成&nbsp;&nbsp;<input type="radio" name="prostatus" value="2" />已完成&nbsp;&nbsp;<input type="radio" name="prostatus" value="-1"/>全部&nbsp;&nbsp; 
+		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		 订单号/旺旺号：<input type="text" name="orderno" id="orderno" style="width:250px" class="input-text">
+		 &nbsp;&nbsp;&nbsp;快递单号：<input type="text" name="transno" id="transno" style="width:250px" class="input-text">
+		</div>
+		<div style="height:20px"></div>
+		<div class="text-c">
+		是否丢件：<input type="radio" name="misstatus" value="-1" checked>全部&nbsp;&nbsp; <input type="radio" name="misstatus" value="1" />已丢件&nbsp;&nbsp;<input type="radio" name="misstatus" value="2" />未丢件
+		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		 事件类型：<select id="eventType" name="eventType"  ></select>
+		 &nbsp;&nbsp;&nbsp;
+		 店铺：<select id="shopType" name="shopType"  ></select>
+		 <!--创建人：</span><input type="text" name="createby" id="createby"/>&nbsp;&nbsp;
+		 <span class="select-box inline">	
+			<select name="" class="select">
+				<option value="0">全部分类</option>
+				<option value="1">分类一</option>
+				<option value="2">分类二</option>
+			</select>
+			</span>	
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		创建日期：
+			<input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'logmax\')||\'%y-%M-%d\'}' })" id="logmin" name="logmin" class="input-text Wdate" style="width:120px;">
+			-
+			<input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'logmin\')}',maxDate:'%y-%M-%d' })" id="logmax" name="logmax" class="input-text Wdate" style="width:120px;">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+		</div>-->
+		<button name="" id="" class="btn btn-success" onclick="queryData()"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+			<span class="l">
+				<!--<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>--> 
+				<a class="btn btn-primary radius" data-title="新增售后" onclick="addshouhou(this)" href="javascript:;">
+					<i class="Hui-iconfont">&#xe600;</i> 新增售后
+				</a>
+			</span> 
+			<span class="r"> <a href="javascript:;" onclick="prepage()">上一页</a>&nbsp;&nbsp;<span id="curPage"></span>/<span id="maxPage"></span>&nbsp;&nbsp;<a href="javascript:;" onclick="nextpage()">下一页</a>  共有数据：<strong id="totalcount">54</strong> 条   </span> 
+		</div>
+
+		<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+				<tr class="text-c">
+					<!--<th width="25"><input type="checkbox" name="" value=""></th>-->
+					<th width="80">店铺</th>
+					<th width="160">订单号/旺旺</th>
+					<th width="60">客户姓名</th>
+					<th width="100">快递单号</th>
+					<th width="60">事件类型</th>
+					<th width="120">创建时间</th>
+					<!--<th width="75">原因</th>-->
+					<!--<th width="60">金额</th>-->
+					<th width="60">处理状态</th>					
+					<th width="60">是否丢件</th>
+					<!--<th width="120">订单金额</th>-->
+					<th width="60">处理备注</th>
+					<th width="80">操作</th>
+					
+				</tr>
+			</thead>
+			<tbody id="restable">
+				
+				
+			</tbody>
+		</table>
+	</div>
+	</div>
+	
+	<script type="text/javascript">
+		var curPage = 1;
+		var maxPage = 1;
+		
+		$(document).ready(function(){
+		  initData(queryData);
+		  initSelect("et","eventType",true);
+		  initSelect("shop","shopType",true);
+		});
+		
+		function queryData() {
+			queryPageData(1);
+		}
+	
+		function prepage() {
+			if(curPage<=1) {
+				alert("已经是第一页了");
+				return;
+			}
+			queryPageData(curPage-1);
+		}
+	
+		function nextpage() {
+			if(curPage>=maxPage) {
+				alert("已经是最后一页了");
+				return;
+			}
+			queryPageData(curPage+1);
+		}
+	
+		function queryPageData(pageIndex) {
+			var prostatus = $("input[name='prostatus']:checked").val();
+			var orderno = $("#orderno").val();
+			var transno = $("#transno").val();
+			var misstatus = $("input[name='misstatus']:checked").val();
+			var createby = $("#createby").val();
+			var logmin = $("#logmin").val();
+			var logmax = $("#logmax").val();
+			var eventType = $("#eventType").val();
+			var shopType=$("#shopType").val();
+			$.ajax({url:"/shouhouapi/shouhouList/list?pageNum="+pageIndex+"&pageSize=10",data:{"shop":shopType,"dealStatus":prostatus,"orderNo":orderno,"transNo":transno,"miss":misstatus,"eventType":eventType,},success:function(result){
+				//var result="{\"code\":200,\"message\":\"success\",\"data\":{\"pageNum\":1,\"pageSize\":10,\"size\":1,\"startRow\":1,\"endRow\":1,\"total\":1,\"pages\":1,\"list\":[{\"id\":\"1\",\"ids\":null,\"sortColumns\":null,\"shop\":\"tm-lqy\",\"shops\":null,\"createTime\":\"2018-11-13 20:58:32\",\"createTimeGte\":null,\"createTimeLte\":null,\"updateTime\":\"2018-11-13 20:58:35\",\"updateTimeGte\":null,\"updateTimeLte\":null,\"createBy\":\"1\",\"updateBy\":\"1\",\"orderNo\":\"11111\",\"orderNoLike\":null,\"cusName\":\"1212\",\"transNo\":\"123123123\",\"fee\":10.00,\"reason\":\"123123123\",\"eventType\":\"123\",\"dealStatus\":1,\"dealRemark\":\"123123123\",\"miss\":1,\"orderFee\":65.26}],\"prePage\":0,\"nextPage\":0,\"isFirstPage\":true,\"isLastPage\":true,\"hasPreviousPage\":false,\"hasNextPage\":false,\"navigatePages\":8,\"navigatepageNums\":[1],\"navigateFirstPage\":1,\"navigateLastPage\":1,\"firstPage\":1,\"lastPage\":1}}";
+				//var res = JSON.parse(result);
+				var res = result;
+				if(res.data && res.data.list) {
+					var tablehtml = "";
+					$("#totalcount").text(res.data.total);
+					$("#curPage").text(res.data.pageNum);
+					curPage = res.data.pageNum;
+					$("#maxPage").text(res.data.pages);
+					maxPage = res.data.pages;
+					for (var i = 0 ; i < res.data.list.length; i++) {
+						var trdata = res.data.list[i];
+						var delstatusdec = "";
+						var delstatuscolor=""
+						if (trdata.dealStatus == 1) {
+							delstatusdec = "待处理";
+						}else {
+							delstatusdec = "已完成";
+							delstatuscolor = "background-color:green;";
+						}
+						var missdec="";
+						if (trdata.miss == 1) {
+							missdec = "已丢件";
+						}else {
+							missdec = "未丢件";
+						}
+						
+						var trhtml = "<tr class=\"text-c\">" +
+											"<td>"+shouhouTypeMap["shop_"+trdata.shop]+"</td>" +
+											"<td>"+trdata.orderNo+"</td>"+
+											"<td>"+trdata.cusName+"</td>"+
+											"<td>"+trdata.transNo+"</td>"+
+											"<td>"+shouhouTypeMap["et_"+trdata.eventType]+"</td>"+
+											"<td>"+trdata.createTime+"</td>"+
+											//"<td>"+trdata.reason+"</td>"+
+											//"<td>"+trdata.fee+"</td>"+
+											"<td class=\"td-status\" style=\""+delstatuscolor+"\">"+delstatusdec+"</td>"+											
+											"<td>"+missdec+"</td>"+
+											//"<td>"+trdata.orderFee+"</td>"+
+											"<td><div class=\"cusinfo\">"+trdata.dealRemark+"</div></td>"+
+											"<td class=\"f-14 td-manage\"><a href = \"javascript:;\" onclick=\"toshouhoupopwindow('shouhou_detail.html?id="+trdata.id+"')\" >查看</>&nbsp;&nbsp;<a href = \"javascript:;\" onclick=\"toshouhoupopwindow('shouhou_update.html?id="+trdata.id+"')\">修改</a>"+											
+											"</tr>";
+						tablehtml = tablehtml + trhtml;						
+					}
+					$("#restable").html(tablehtml);
+				}
+			}});
+		}
+		
+		function addshouhou() {
+			makeNewWindow("shouhou_add.html?fromparent=1");
+		}
+		
+		function toshouhoupopwindow(url) {
+			makeNewWindow(url);
+		}
+		
+		var newWindow;//定义一个窗口，有利于窗口间的通讯
+		function makeNewWindow(url) {
+		   if (!newWindow || newWindow.closed) {
+				var width = 800;
+				var height = 600;
+				var left = parseInt((screen.availWidth/2) - (width/2));//屏幕居中
+				var top = parseInt((screen.availHeight/2) - (height/2));
+				var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
+				newWindow = window.open(url, "subWind", windowFeatures);
+			} else {
+				// window is already open, so bring it to the front
+				newWindow.focus();
+			}
+		}
+	
+	
+	</script>
+	
+<body>	
+</html>

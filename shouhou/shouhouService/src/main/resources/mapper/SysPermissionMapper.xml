@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.SysPermissionMapper">
+	<resultMap id="BaseResultMap" type="com.simple.domain.po.SysPermission">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="available" jdbcType="VARCHAR" property="available" />
+		<result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+		<result column="parent_ids" jdbcType="VARCHAR" property="parentIds" />
+		<result column="permission" jdbcType="VARCHAR" property="permission" />
+		<result column="resource_type" jdbcType="VARCHAR" property="resourceType" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+		<result column="sort" jdbcType="INTEGER" property="sort" />
+	</resultMap>
+	
+	<sql id="allColumns">
+	    `id`,`name`,`available`,`parent_id`,`parent_ids`,`permission`,`resource_type`,`url`,`sort` 
+	</sql>
+
+	<sql id="dynamicWhereConditions">
+	        where 1 = 1
+		<if test=" null != id "> and `id` = #{id} </if>    
+		<if test=" null != name "> and `name` = #{name} </if>    
+		<if test=" null != nameLike and '' != nameLike "> and `name`  like concat('%', #{nameLike},'%')</if> 
+		<if test=" null != available "> and `available` = #{available} </if>    
+		<if test=" null != parentId "> and `parent_id` = #{parentId} </if>    
+		<if test=" null != parentIds "> and `parent_ids` = #{parentIds} </if>    
+		<if test=" null != permission "> and `permission` = #{permission} </if>    
+		<if test=" null != permissions "> 
+			and `permission` in
+		   <foreach collection="permissions" item="item_permission" open="(" close=")" separator=",">  
+		     #{item_permission} 
+		   </foreach> 
+		</if>
+		<if test=" null != resourceType "> and `resource_type` = #{resourceType} </if>    
+		<if test=" null != url "> and `url` = #{url} </if>    
+		<if test=" null != sort "> and `sort` = #{sort} </if>    
+		<if test=" null != sortFrom "> and `sort`  >= #{sortFrom} </if>  
+		<if test=" null != sortTo ">  and #{sortTo}    >= `sort` </if>  
+		<if test=" null != sortGte ">  and `sort`  >= #{sortGte} </if>  
+		<if test=" null != sortGt ">  and `sort`  > #{sortGt} </if>  
+		<if test=" null != sortLte "> and #{sortLte}  >=  `sort` </if>  
+		<if test=" null != sortLt "> and #{sortLt}  >  `sort` </if>  
+		<if test=" null != ids ">
+		 	and id in  
+			<foreach collection="ids" index="index" item="idItem" open="(" separator="," close=")">
+			#{idItem}
+			</foreach>
+		</if>		
+		<if test=" null != sortColumns"> order by ${sortColumns} </if>
+	</sql>
+	
+	<select id="findList" parameterType="com.simple.domain.po.SysPermission" resultMap="BaseResultMap">
+		select <include refid="allColumns" /> from sys_permission
+		<include refid="dynamicWhereConditions" />
+	</select>
+	
+	<select id="findPermissionByRoleId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	    SELECT p.*
+	    FROM sys_role_permission r2p, sys_permission p
+	    WHERE r2p.permission_id = p.id
+	    AND r2p.id = #{roleId}
+	</select>
+
+  	<select id="findPermissionByRoleIds" resultMap="BaseResultMap"> 
+	    SELECT p.*
+	    FROM sys_role_permission r2p, sys_permission p
+	    WHERE resource_type='0' and r2p.permission_id = p.id 
+	    <if test="roleIds != null and roleIds.size() > 0 ">
+		    AND r2p.id in
+		    <foreach item="id" index="index" collection="roleIds" open="(" separator="," close=")">
+		      #{id}
+		    </foreach>
+		</if>
+  	</select>
+	
+	
+	
+	
+	
+</mapper>

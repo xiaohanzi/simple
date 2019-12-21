@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.AnalysisWordsMapper">
+	<resultMap id="BaseResultMap" type="com.simple.domain.po.AnalysisWords">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="product_id" jdbcType="VARCHAR" property="productId" />
+		<result column="create_by" jdbcType="VARCHAR" property="createBy" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="words_name" jdbcType="VARCHAR" property="wordsName" />
+	</resultMap>
+	
+	<sql id="allColumns">
+	    `id`,`product_id`,`create_by`,`create_time`,`update_by`,`update_time`,`words_name` 
+	</sql>
+
+	<sql id="dynamicWhereConditions">
+	        where 1 = 1
+		<if test=" null != id "> and `id` = #{id} </if>    
+		<if test=" null != productId "> and `product_id` = #{productId} </if>    
+		<if test=" null != createBy "> and `create_by` = #{createBy} </if>    
+		<if test=" null != createTime "> and `create_time` = #{createTime} </if>    
+		<if test=" null != updateBy "> and `update_by` = #{updateBy} </if>    
+		<if test=" null != updateTime "> and `update_time` = #{updateTime} </if>    
+		<if test=" null != wordsName "> and `words_name` = #{wordsName} </if>    
+		<if test=" null != wordsNameLike and '' != wordsNameLike "> and `words_name`  like concat('%', #{wordsNameLike},'%')</if> 
+		<if test=" null != ids ">
+		 	and id in  
+			<foreach collection="ids" index="index" item="idItem" open="(" separator="," close=")">
+			#{idItem}
+			</foreach>
+		</if>		
+		<if test=" null != sortColumns"> order by ${sortColumns} </if>
+	</sql>
+	
+	<select id="findList" parameterType="com.simple.domain.po.AnalysisWords" resultMap="BaseResultMap">
+		select <include refid="allColumns" /> from analysis_words
+		<include refid="dynamicWhereConditions" />
+	</select>
+	
+	<select id="findOne" parameterType="Map" resultMap="BaseResultMap">
+		select <include refid="allColumns" /> from analysis_words where `product_id` = #{productId} and `words_name` = #{wordsName} 
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>后台</title>
+	<link rel="stylesheet" type="text/css" href="../static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="../lib/Hui-iconfont/1.0.8/iconfont.css" />
+	<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/style.css" />
+
+	<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script> 
+	<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+	<script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script> 
+	<script type="text/javascript" src="../static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="../lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+	<script type="text/javascript" src="../lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+	<script type="text/javascript" src="../lib/laypage/1.2/laypage.js"></script>
+	<script type="text/javascript" src="../static/initdata.js"></script>
+	<style>
+		.cusinfo{
+			width:260px;
+			word-break:keep-all;
+			white-space:nowrap;
+			overflow:hidden;
+			text-overflow:ellipsis;
+		}
+	</style>
+</head>
+<body>
+    <div>补发列表<div>
+	
+	<div class="page-container">
+		<div class="text-c">
+		 &nbsp;&nbsp;&nbsp;
+		 请选择店铺：<select id="shopType" name="shopType"  ></select>&nbsp;&nbsp;&nbsp;		 
+		<button name="querybtn" id="querybtn" class="btn btn-success" onclick="exportTm(this)"><i class="Hui-iconfont">&#xe665;</i> 导出</button>		
+		</div
+	</div>
+	
+	<script type="text/javascript">
+
+		$(document).ready(function(){
+		  initSelect("shop","shopType",true);
+		});
+	
+		var newWindow;//定义一个窗口，有利于窗口间的通讯
+		function makeNewWindow(url) {
+		   if (!newWindow || newWindow.closed) {
+				var width = 800;
+				var height = 600;
+				var left = parseInt((screen.availWidth/2) - (width/2));//屏幕居中
+				var top = parseInt((screen.availHeight/2) - (height/2));
+				var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
+				newWindow = window.open(url, "subWind", windowFeatures);
+			} else {
+				// window is already open, so bring it to the front
+				newWindow.focus();
+			}
+		}
+	
+		function exportTm() {
+			var shoptype = $("#shopType").val();
+			if(shoptype) {
+				makeNewWindow("/shouhouapi/shouhouBujian/exportTms?shopType="+shoptype);
+			}else {
+				alert("请选择店铺!");
+			}
+			
+		}
+	
+		
+	
+	
+	</script>
+	
+<body>	
+</html>

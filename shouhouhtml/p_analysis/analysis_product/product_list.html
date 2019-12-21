@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>后台</title>
+	<link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="/lib/Hui-iconfont/1.0.8/iconfont.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+
+	<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script> 
+	<script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
+	<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script> 
+	<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+	<script type="text/javascript" src="/lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+	<script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
+	<script type="text/javascript" src="/static/initdata.js"></script>
+	<style>
+		.cusinfo{
+			width:260px;
+			word-break:keep-all;
+			white-space:nowrap;
+			overflow:hidden;
+			text-overflow:ellipsis;
+		}
+	</style>
+</head>
+<body>
+    <div>产品列表<div>
+	
+	<div class="page-container">
+		<div class="text-c">
+		 产品名称：<input type="text" name="productNameLike" id="productNameLike" style="width:250px" class="input-text">
+		</div>
+		<button name="" id="" class="btn btn-success" onclick="queryData()"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+			<span class="l">
+				<!--<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>--> 
+				<a class="btn btn-primary radius" data-title="新增售后" onclick="addshouhou(this)" href="javascript:;">
+					<i class="Hui-iconfont">&#xe600;</i> 新增产品
+				</a>
+			</span> 
+			<span class="r"> <a href="javascript:;" onclick="prepage()">上一页</a>&nbsp;&nbsp;<span id="curPage"></span>/<span id="maxPage"></span>&nbsp;&nbsp;<a href="javascript:;" onclick="nextpage()">下一页</a>  共有数据：<strong id="totalcount">54</strong> 条   </span> 
+		</div>
+
+		<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+				<tr class="text-c">
+					<!--<th width="25"><input type="checkbox" name="" value=""></th>-->
+					<th width="160">产品名称</th>
+					<th width="80">操作</th>
+					
+				</tr>
+			</thead>
+			<tbody id="restable">
+				
+				
+			</tbody>
+		</table>
+	</div>
+	</div>
+	
+	<script type="text/javascript">
+		var curPage = 1;
+		var maxPage = 1;
+		
+		$(document).ready(function(){
+		  initData(queryData);
+		});
+		
+		function queryData() {
+			queryPageData(1);
+		}
+	
+		function prepage() {
+			if(curPage<=1) {
+				alert("已经是第一页了");
+				return;
+			}
+			queryPageData(curPage-1);
+		}
+	
+		function nextpage() {
+			if(curPage>=maxPage) {
+				alert("已经是最后一页了");
+				return;
+			}
+			queryPageData(curPage+1);
+		}
+	
+		function queryPageData(pageIndex) {
+			var productNameLike = $("#productNameLike").val();
+			$.ajax({url:"/shouhouapi/analysisProduct/list?pageNum="+pageIndex+"&pageSize=10",data:{"productNameLike":productNameLike},success:function(result){
+				//var result="{\"code\":200,\"message\":\"success\",\"data\":{\"pageNum\":1,\"pageSize\":10,\"size\":1,\"startRow\":1,\"endRow\":1,\"total\":1,\"pages\":1,\"list\":[{\"id\":\"1\",\"ids\":null,\"sortColumns\":null,\"shop\":\"tm-lqy\",\"shops\":null,\"createTime\":\"2018-11-13 20:58:32\",\"createTimeGte\":null,\"createTimeLte\":null,\"updateTime\":\"2018-11-13 20:58:35\",\"updateTimeGte\":null,\"updateTimeLte\":null,\"createBy\":\"1\",\"updateBy\":\"1\",\"orderNo\":\"11111\",\"orderNoLike\":null,\"cusName\":\"1212\",\"transNo\":\"123123123\",\"fee\":10.00,\"reason\":\"123123123\",\"eventType\":\"123\",\"dealStatus\":1,\"dealRemark\":\"123123123\",\"miss\":1,\"orderFee\":65.26}],\"prePage\":0,\"nextPage\":0,\"isFirstPage\":true,\"isLastPage\":true,\"hasPreviousPage\":false,\"hasNextPage\":false,\"navigatePages\":8,\"navigatepageNums\":[1],\"navigateFirstPage\":1,\"navigateLastPage\":1,\"firstPage\":1,\"lastPage\":1}}";
+				//var res = JSON.parse(result);
+				var res = result;
+				if(res.data && res.data.list) {
+					var tablehtml = "";
+					$("#totalcount").text(res.data.total);
+					$("#curPage").text(res.data.pageNum);
+					curPage = res.data.pageNum;
+					$("#maxPage").text(res.data.pages);
+					maxPage = res.data.pages;
+					for (var i = 0 ; i < res.data.list.length; i++) {
+						var trdata = res.data.list[i];						
+						var trhtml = "<tr class=\"text-c\">" +
+											"<td>"+trdata.productName+"</td>"+
+											"<td class=\"f-14 td-manage\"><a target=\"_blank\" href = \"/p_analysis/analysis_words/words_list.html?productId="+trdata.id+"\" >成交词列表</a>&nbsp;&nbsp;&nbsp;<a href = \"javascript:;\" onclick=\"toshouhoupopwindow('/p_analysis/analysis_product/product_update.html?id="+trdata.id+"')\">修改</a>"+											
+											"</tr>";
+						tablehtml = tablehtml + trhtml;						
+					}
+					$("#restable").html(tablehtml);
+				}
+			}});
+		}
+		
+		function addshouhou() {
+			makeNewWindow("/p_analysis/analysis_product/product_add.html?fromparent=1");
+		}
+		
+		function toshouhoupopwindow(url) {
+			makeNewWindow(url);
+		}
+		
+		var newWindow;//定义一个窗口，有利于窗口间的通讯
+		function makeNewWindow(url) {
+		   if (!newWindow || newWindow.closed) {
+				var width = 800;
+				var height = 600;
+				var left = parseInt((screen.availWidth/2) - (width/2));//屏幕居中
+				var top = parseInt((screen.availHeight/2) - (height/2));
+				var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
+				newWindow = window.open(url, "subWind", windowFeatures);
+			} else {
+				// window is already open, so bring it to the front
+				newWindow.focus();
+			}
+		}
+	
+	
+	</script>
+	
+<body>	
+</html>

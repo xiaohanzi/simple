@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.UserInfoMapper">
+	<resultMap id="BaseResultMap" type="com.simple.domain.po.UserInfo">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="username" jdbcType="VARCHAR" property="username" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="is_admin" jdbcType="INTEGER" property="isAdmin" />
+	</resultMap>
+	
+	<sql id="allColumns">
+	    `id`,`username`,`name`,`password`,`create_time`,`last_login_time`,`status`,`is_admin` 
+	</sql>
+
+	<sql id="dynamicWhereConditions">
+	        where 1 = 1
+		<if test=" null != id "> and `id` = #{id} </if>    
+		<if test=" null != username "> and `username` = #{username} </if>    
+		<if test=" null != name "> and `name` = #{name} </if>    
+		<if test=" null != password "> and `password` = #{password} </if>    
+		<if test=" null != createTime "> and `create_time` = #{createTime} </if>    
+		<if test=" null != lastLoginTime "> and `last_login_time` = #{lastLoginTime} </if>    
+		<if test=" null != status "> and `status` = #{status} </if>    
+		<if test=" null != isAdmin "> and `is_admin` = #{isAdmin} </if>    
+		<if test=" null != ids ">
+		 	and id in  
+			<foreach collection="ids" index="index" item="idItem" open="(" separator="," close=")">
+			#{idItem}
+			</foreach>
+		</if>		
+		<if test=" null != sortColumns"> order by ${sortColumns} </if>
+	</sql>
+	
+	<select id="findList" parameterType="com.simple.domain.po.UserInfo" resultMap="BaseResultMap">
+		select <include refid="allColumns" /> from user_info
+		<include refid="dynamicWhereConditions" />
+	</select>
+	
+	
+	
+	
+    <select id="hasButtonPermission" resultType="java.lang.Integer">
+	    SELECT 1
+	    FROM sys_user_role ur, sys_role_permission rp, sys_permission p
+	    WHERE rp.role_id = ur.role_id
+	    AND rp.permission_id = p.id
+	    AND p.resource_type = 1
+	    AND ur.uid = #{userId}
+	    AND p.permission = #{permission}
+  	</select>
+	
+	
+</mapper>

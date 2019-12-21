@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>后台</title>
+	<link rel="stylesheet" type="text/css" href="../static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="../lib/Hui-iconfont/1.0.8/iconfont.css" />
+	<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/style.css" />
+
+	<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script> 
+	<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+	<script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script> 
+	<script type="text/javascript" src="../static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="../lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+	<script type="text/javascript" src="../lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+	<script type="text/javascript" src="../lib/laypage/1.2/laypage.js"></script>
+	<script type="text/javascript" src="../static/initdata.js"></script>
+	<style>
+		/* 第一个 span */
+			.text-c>span:first-child{
+			display: inline-block;
+			width: 30%;
+			text-align: right
+		}
+		/* 第二个 span */
+		.text-c>span:last-child{
+			display: inline-block;
+			width: 50%;
+			text-align: left
+		}
+		/* span 下面的 input */
+		.text-c>span input[type="text"],.text-c>span textarea{
+			width: 100% !important;
+		}
+		.button {
+			background-color: #4CAF50; /* Green */
+			border: none;
+			color: white;
+			padding: 3px 30px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 8px;
+		}
+	</style>
+</head>
+<body>
+    <div style="text-align:center;font-size:20px;color:red">补发件详情</div>
+	
+	<div class="page-container">		
+		<div class="text-c">
+			<span>店铺：</span>
+			<span class="select-box inline">	
+				<select id="shopType" name="shopType" class="select" style="width:100%">
+				</select>
+			</span>
+		</div>	
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>订单号/旺旺号（<font color="red">*</font>）：</span>
+			<span><input type="text" name="orderno" id="orderno" style="width:250px" class="input-text"></span>
+		</div>
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>是否邮政：</span>
+			<span> <input type="radio" name="ems" value="2" checked />发申通&nbsp;&nbsp;<input type="radio" name="ems" value="1" />发邮政</span>
+		</div>		
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>客户姓名：</span>
+			<span><input type="text" name="cusname" id="cusname" style="width:250px" class="input-text"></span>
+		</div>	
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>客户电话：</span>
+			<span><input type="text" name="cusphone" id="cusphone" style="width:250px" class="input-text"></span>
+		</div>
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>客户地址：</span>
+			<span><input type="text" name="cusaddr" id="cusaddr" style="width:250px" class="input-text"></span>
+		</div>	
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>补发件信息（<font color="red">货品 + 颜色 + 尺码 +数量</font>）：</span>
+			<span><textarea  id="content" rows="3" style="width:250px" > </textarea></span>
+		</div>
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>补发原因：</span>
+			<span class="select-box inline">	
+				<select id="bufareason" name="bufareason" class="select" style="width:100%">
+				</select>
+			</span>
+		</div>			
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>快递单号：</span>
+			<span><input type="text" name="transno" id="transno" style="width:250px" class="input-text"></span>
+		</div>
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>是否有揽收物流信息：</span>
+			<span> <input type="radio" name="transinfo" value="1" checked />无&nbsp;&nbsp;<input type="radio" name="transinfo" value="2" />有</span>
+		</div>					
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>处理备注：</span>
+			<span><textarea  id="dealremark" rows="3" style="width:250px" > </textarea></span>
+		</div>				
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>创建人：</span>
+			<span><input type="text" name="createby" id="createby" style="width:250px" class="input-text"></span>
+		</div>
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>创建时间：</span>
+			<span><input type="text" name="createtime" id="createtime" style="width:250px" class="input-text"></span>
+		</div>		
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>最后更新人：</span>
+			<span><input type="text" name="updateby" id="updateby" style="width:250px" class="input-text"></span>
+		</div>
+		<div style="height:10px"></div>
+		<div class="text-c">
+			<span>最后更新时间：</span>
+			<span><input type="text" name="updatetime" id="updatetime" style="width:250px" class="input-text"></span>
+		</div>	
+	</div>
+	</div>
+	
+	<script type="text/javascript">
+	
+		var id = getUrlParam("id");
+	
+		$(document).ready(function(){
+		  $.ajax({url:"/shouhouapi/shouhouBujian/findById?id="+id,success:function(result){
+			//var result = "{\"code\":200,\"message\":\"查询成功\",\"data\":{\"id\":\"1\",\"ids\":null,\"sortColumns\":null,\"shop\":\"tm-lqy\",\"shops\":null,\"createTime\":\"2018-11-13 20:58:32\",\"createTimeGte\":null,\"createTimeLte\":null,\"updateTime\":\"2018-11-13 20:58:35\",\"updateTimeGte\":null,\"updateTimeLte\":null,\"createBy\":\"1\",\"updateBy\":\"1\",\"orderNo\":\"11111\",\"orderNoLike\":null,\"cusName\":\"1212\",\"transNo\":\"123123123\",\"fee\":10.00,\"reason\":\"123123123\",\"eventType\":\"123\",\"dealStatus\":1,\"dealRemark\":\"123123123\",\"miss\":1,\"orderFee\":65.26}}";
+			//var res = JSON.parse(result);
+			var res = result;
+			if(res.data) {
+				initSelect("shop","shopType",false,res.data.shop);
+				initSelect("bujian","bufareason",false,res.data.reason);	
+				$("#shopType").val(res.data.shop);
+				$("#orderno").val(res.data.orderNo);
+				$("input[name='ems'][value='"+res.data.ems+"']").attr("checked",true);
+				$("#cusname").val(res.data.cusName);
+				$("#cusphone").val(res.data.cusPhone);
+				$("#cusaddr").val(res.data.cusAddr);
+				$("#content").val(res.data.content);
+				$("#transno").val(res.data.transNo);
+				$("input[name='transinfo'][value='"+res.data.transInfo+"']").attr("checked",true);
+				$("#dealremark").val(res.data.dealRemark);		
+				$("#createby").val(res.data.createBy);
+				$("#createtime").val(res.data.createTime);
+				$("#updateby").val(res.data.updateBy);
+				$("#updatetime").val(res.data.updateTime);
+			}else {
+				initSelect("shop","shopType");
+				initSelect("bujian","bufareason");
+			}
+	
+		  }});
+		  	  
+		});
+		
+	
+	</script>
+	
+<body>	
+</html>
